@@ -78,7 +78,26 @@ app.get(/api/, async (req, res, next) => {
     const result = await sendToLocalDockerLambda(translated);
 
     res.send(result);
-})
+});
+
+app.delete(/api/, async (req, res, next) => {
+    const {headers, url} = req;
+    console.log(`DELETE::${url}`);
+
+    const translated = {
+        headers,
+        requestContext: {
+            http: {
+                method: 'DELETE',
+                path: url
+            }
+        }
+    }
+
+    const result = await sendToLocalDockerLambda(translated);
+
+    res.send(result);
+});
 
 app.listen(PORT, () => {
     console.log(`translator running on ${PORT}`)
